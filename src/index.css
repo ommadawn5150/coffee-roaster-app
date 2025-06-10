@@ -1,0 +1,10 @@
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* bodyに基本スタイルを適用 */
+body {
+  @apply bg-slate-200 font-sans antialiased;
+}
