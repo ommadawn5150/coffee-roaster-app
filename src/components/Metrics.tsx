@@ -17,30 +17,31 @@ const Metrics: React.FC<Props> = ({ temp, ror, elapsedRoastTime }) => {
   };
 
   return (
-    // ▼▼▼ gapを調整して3つの要素を均等に配置 ▼▼▼
-    <div className="flex items-center gap-12">
+    <div className="grid w-full gap-3 sm:grid-cols-3 sm:gap-4">
       {/* 経過時間（タイマー） */}
       <div className="text-center">
-        <p className="text-sm font-medium text-slate-500">Roast Time</p>
-        <p className="text-2xl font-semibold text-slate-800 tracking-tight mt-1">
+        <p className="text-xs sm:text-sm font-medium text-slate-500 uppercase tracking-wide">ROAST TIME</p>
+        <p className="text-xl sm:text-2xl font-semibold text-slate-800 tracking-tight mt-1 font-mono tabular-nums min-w-[5ch]">
           {formatTime(elapsedRoastTime)}
         </p>
       </div>
 
-      {/* 温度 */}
-      <div className="flex items-baseline gap-2 text-center">
-        <p className="text-2xl font-semibold text-slate-800 tracking-tight">
+      {/* 現在温度 */}
+      <div className="text-center">
+        <p className="text-xs sm:text-sm font-medium text-slate-500 uppercase tracking-wide">CURRENT TEMP</p>
+        <p className="text-xl sm:text-2xl font-semibold text-slate-800 tracking-tight mt-1 font-mono tabular-nums min-w-[6ch]">
           {temp.toFixed(1)}
+          <span className="ml-1 text-xs sm:text-sm font-medium text-slate-500">°C</span>
         </p>
-        <p className="text-sm font-medium text-slate-500">°C</p>
       </div>
       
       {/* RoR */}
-      <div className="flex items-baseline gap-2 text-center">
-         <p className="text-2xl font-semibold text-slate-800 tracking-tight">
+      <div className="text-center">
+        <p className="text-xs sm:text-sm font-medium text-slate-500 uppercase tracking-wide">RoR</p>
+        <p className="text-xl sm:text-2xl font-semibold text-slate-800 tracking-tight mt-1 font-mono tabular-nums min-w-[6ch]">
           {ror.toFixed(1)}
+          <span className="ml-1 text-xs sm:text-sm font-medium text-slate-500">°C/min</span>
         </p>
-        <p className="text-sm font-medium text-slate-500">RoR</p>
       </div>
     </div>
   );

@@ -55,9 +55,10 @@ export const downloadHTML = (chartImageDataUrl: string, roastData: RoastData[]) 
             <h3>${maxTemp.toFixed(1)} °C</h3>
           </div>
         </div>
-        
         <h2>Roast Graph</h2>
-        <img src="${chartImageDataUrl}" alt="Roast Profile Graph">
+        ${chartImageDataUrl
+          ? `<img src="${chartImageDataUrl}" alt="Roast Profile Graph">`
+          : '<p style="color:#718096;">グラフ画像は取得できませんでした。</p>'}
         
       </div>
     </body>

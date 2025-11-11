@@ -5,18 +5,24 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm:dev:frontend\" \"npm:dev:backend\"",
-    "dev:frontend": "vite",
+    "dev:frontend": "vite --host 0.0.0.0",
     "dev:backend": "node server/server.js",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@serialport/parser-readline": "^13.0.0",
     "clsx": "^2.1.1",
-    "echarts-for-react": "^3.0.2",
+    "html-to-image": "^1.11.11",
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "serialport": "^13.0.0",
+    "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+    "recharts": "^2.12.7",
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
