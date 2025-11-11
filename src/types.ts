@@ -10,6 +10,7 @@ export interface RoastSession {
   beanName?: string;
   beanWeight?: number;
   roastedWeight?: number;
+  tastingNote?: string;
   createdAt: string;
   totalTime: number;
   data: RoastData[];

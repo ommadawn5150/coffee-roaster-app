@@ -12,7 +12,6 @@ interface Props {
   onToggleEditing: () => void;
   onToggleDeleteSelection: (id: string) => void;
   onDeleteSelected: () => void;
-  onClear: () => void;
   onDownload: (id: string) => void;
   onSaveSessionDetails: (id: string, details: EditDraft) => void;
 }
@@ -31,6 +30,7 @@ const initialDraft = {
   beanName: '',
   beanWeight: '',
   roastedWeight: '',
+  tastingNote: '',
 };
 type EditDraft = typeof initialDraft;
 
@@ -45,7 +45,6 @@ const HistoryPanel: React.FC<Props> = ({
   onToggleEditing,
   onToggleDeleteSelection,
   onDeleteSelected,
-  onClear,
   onDownload,
   onSaveSessionDetails,
 }) => {
@@ -66,6 +65,7 @@ const HistoryPanel: React.FC<Props> = ({
       beanName: session.beanName ?? '',
       beanWeight: session.beanWeight != null ? session.beanWeight.toString() : '',
       roastedWeight: session.roastedWeight != null ? session.roastedWeight.toString() : '',
+      tastingNote: session.tastingNote ?? '',
     });
   };
 
@@ -74,7 +74,7 @@ const HistoryPanel: React.FC<Props> = ({
     setEditDraft(initialDraft);
   };
 
-  const handleEditFieldChange = <K extends keyof EditDraft>(field: K, value: EditDraft[K]) => {
+const handleEditFieldChange = <K extends keyof EditDraft>(field: K, value: EditDraft[K]) => {
     setEditDraft((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -125,13 +125,6 @@ const HistoryPanel: React.FC<Props> = ({
               >
                 完了
               </button>
-              <button
-                type="button"
-                onClick={onClear}
-                className="text-xs font-semibold text-slate-400 hover:text-slate-600"
-              >
-                全て削除
-              </button>
             </>
           ) : (
             <button
@@ -167,11 +160,13 @@ const HistoryPanel: React.FC<Props> = ({
           const roastedWeightValue = roastedWeight != null ? String(roastedWeight) : '';
           const roastedWeightLabel =
             roastedWeightValue.length > 0 ? `${roastedWeightValue} g` : '未設定';
+          const tastingNoteLabel = session.tastingNote ?? '未設定';
           const roastIndexLabel =
             greenWeight != null && roastedWeight != null && greenWeight > 0
               ? (greenWeight / roastedWeight).toFixed(2)
               : '—';
           const isSessionEditing = editingSessionId === session.id;
+          const isDeletable = session.totalTime < 300;
           const selectionClasses = isSelected ? 'border-slate-400 bg-slate-100' : 'border-slate-200 bg-white/80';
           return (
             <li
@@ -220,6 +215,16 @@ const HistoryPanel: React.FC<Props> = ({
                             />
                           </label>
                         </div>
+                        <label className="flex flex-col gap-1">
+                          <span>Tasting Note</span>
+                          <textarea
+                            rows={2}
+                            value={editDraft.tastingNote}
+                            onChange={(event) => handleEditFieldChange('tastingNote', event.target.value)}
+                            placeholder={session.tastingNote ?? '例: チョコレート、ナッツの後味'}
+                            className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-700 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-300"
+                          />
+                        </label>
                         <span className="text-[11px] text-slate-500">
                           Roast Index:{' '}
                           {(() => {
@@ -255,6 +260,7 @@ const HistoryPanel: React.FC<Props> = ({
                             <span>Roasted Weight: {roastedWeightLabel}</span>
                             <span>Roast Index: {roastIndexLabel}</span>
                           </div>
+                          <span>Tasting Note: {tastingNoteLabel}</span>
                         </div>
                       </div>
                       {isSelected && (
@@ -271,7 +277,9 @@ const HistoryPanel: React.FC<Props> = ({
                       type="checkbox"
                       checked={isMarkedForDeletion}
                       onChange={() => onToggleDeleteSelection(session.id)}
-                      className="h-4 w-4 accent-rose-500"
+                      disabled={!isDeletable}
+                      title={!isDeletable ? '5分以上のデータは削除できません' : undefined}
+                      className={`h-4 w-4 accent-rose-500 ${!isDeletable ? 'cursor-not-allowed opacity-40' : ''}`}
                     />
                   ) : null}
                   {isSessionEditing ? (

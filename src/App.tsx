@@ -271,6 +271,10 @@ function App() {
   };
 
   const handleToggleSessionDeletion = (id: string) => {
+    const target = savedSessions.find((session) => session.id === id);
+    if (target && target.totalTime >= 300) {
+      return;
+    }
     setSessionsMarkedForDeletion((prev) =>
       prev.includes(id) ? prev.filter((sessionId) => sessionId !== id) : [...prev, id],
     );
@@ -278,6 +282,9 @@ function App() {
 
   const handleDeleteSelectedSessions = () => {
     if (sessionsMarkedForDeletion.length === 0) return;
+    if (!window.confirm('選択したロースト履歴を削除してもよろしいですか？')) {
+      return;
+    }
     const idsToDelete = sessionsMarkedForDeletion;
     const updatedSessions = savedSessions.filter((session) => !idsToDelete.includes(session.id));
     setSavedSessions(updatedSessions);
@@ -292,18 +299,11 @@ function App() {
     setIsHistoryEditing(false);
   };
 
-  const handleClearSessions = () => {
-    setSavedSessions([]);
-    void persistSessions([]);
-    setSelectedSessionId(null);
-    setSessionsMarkedForDeletion([]);
-    setIsHistoryEditing(false);
-  };
-
   type SessionDetailsDraft = {
     beanName: string;
     beanWeight: string;
     roastedWeight: string;
+    tastingNote: string;
   };
 
   const parseWeightInput = (value: string) => {
@@ -328,6 +328,7 @@ function App() {
           beanName: normalizedBeanName.length > 0 ? normalizedBeanName : undefined,
           beanWeight: beanWeightValue,
           roastedWeight: roastedWeightValue,
+          tastingNote: draft.tastingNote.trim().length > 0 ? draft.tastingNote.trim() : undefined,
         };
       });
       void persistSessions(nextSessions);
@@ -517,7 +518,6 @@ function App() {
               onToggleEditing={handleToggleHistoryEditing}
               onToggleDeleteSelection={handleToggleSessionDeletion}
               onDeleteSelected={handleDeleteSelectedSessions}
-              onClear={handleClearSessions}
               onDownload={handleDownloadSession}
               onSaveSessionDetails={handleSaveSessionDetails}
             />
