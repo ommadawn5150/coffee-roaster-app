@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Build artifacts from Vite / npm scripts
+*.tsbuildinfo
+*.cache
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +26,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment / secrets
+.env
+.env.*
+.npmrc
+
+# System-specific
+Thumbs.db
+
+# Avoid accidental commits of local sqlite or data dumps
+*.sqlite
+*.sqlite-journal
